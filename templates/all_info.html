@@ -1,46 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf8">
 	<title></title>
 </head>
 <body>
-	<FORM action = "http://localhost:5000/all_info", method = "post">
-		<SELECT name="Brands" size="1">
-		{%for i in range(0, Brands|length)%} 
-    		<OPTION value="{{Brands[i]}}" >{{Brands[i]}} 
-		{%endfor%} 
-		</SELECT>
-
-		<SELECT name="Categories" size="1">
-		{%for i in range(0, Categories|length)%} 
-    		<OPTION value="{{Categories[i]}}" >{{Categories[i]}} 
-		{%endfor%}
-		</SELECT>
-
-		<SELECT name="Additives" size="1">
-		{%for i in range(0, Additives|length)%} 
-    		<OPTION value="{{Additives[i]}}" >{{Additives[i]}} 
-		{%endfor%}
-		</SELECT>
-
-		<SELECT name="Allergens" size="1">
-		{%for i in range(0, Allergens|length)%} 
-    		<OPTION value="{{Allergens[i]}}" >{{Allergens[i]}} 
-		{%endfor%}
-		</SELECT>
-
-		<SELECT name="Traces" size="1">
-		{%for i in range(0, Traces|length)%} 
-    		<OPTION value="{{Traces[i]}}" >{{Traces[i]}} 
-		{%endfor%}
-		</SELECT>
-
-		<SELECT name="Labels" size="1">
-		{%for i in range(0, Labels|length)%} 
-    		<OPTION value="{{Labels[i]}}" >{{Labels[i]}} 
-		{%endfor%}
-		</SELECT>
-		<p><input type = "submit" value = "submit" /></p>
-	</FORM>
+	<p>{{d}}</p>
 </body>
 </html>
