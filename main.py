@@ -4,6 +4,8 @@ import requests
 import http.client
 import mimetypes
 import json 
+import urllib.request
+
 def list_data(per1, per2):
 	temp = []
 	data = pd.read_json('https://{}.openfoodfacts.org/{}.json'.format(per1, per2))
@@ -12,7 +14,15 @@ def list_data(per1, per2):
 		d = d['id']
 		temp.append(d[3:])
 	return temp
-	 
+
+def fetch_data(data):
+	l=[]
+	for i in range(len(data)):
+		d = data['products'][i]
+		l.append(['image_front_small_url'])
+	return l
+
+
 countries = []
 
 #(nutrient_levels)(ingredients_text_with_allergens)(ingredients_text)(image_front_small_url)
@@ -32,12 +42,15 @@ def index():
     	countrie = 'en:'+request.form['Countries']
     	key_world = request.form['search']
     	pay = countries_data[str(countrie)]['country_code_3']
-    	url = "https://"+pay['en']+".openfoodfacts.org/cgi/search.pl?search_terms="+key_world+"&search_simple=1&action=process&json=1"
-    	#url = "https://{}.openfoodfacts.org/cgi/search.pl?search_terms={}&user_id=abdotalib&password=abd123do&search_simple=1&jqm=1".format(pays, key_world)
+    	url = "https://world.openfoodfacts.org/cgi/search.pl?search_terms={}&search_simple=1&action=process&json=1".format(key_world)#str(pay['en']),
+
+    	#url = "https://{}.openfoodfacts.org/cgi/search.pl?search_terms={}&user_id=abdotalib&password=abd123do&search_simple=1&jqm=1"
     	payload = {}
     	headers= {}
     	response = requests.request("GET", url, headers=headers, data = payload, verify=False)
-    	data =  response.text.encode('utf8')#pd.read_json()
+    	data = json.loads(response.text) #text.encode('utf8')#pd.read_json()
+    	#data = json.load(urllib.request.urlopen(url))
+
     	'''
     	conn = http.client.HTTPSConnection("{}.openfoodfacts.org".format(pays))
     	payload = ''
@@ -48,7 +61,8 @@ def index():
     	#print(data.decode("utf-8"))
     	jsonfiles = json.loads(data.to_json(orient='records'))
     	'''
-    	return  render_template("all_info.html", d = data)
+    	#d = fetch_data(data)
+    	return  render_template("all_info.html", data = data)
     return render_template("index.html", Countries = countries, Countries_len = len(countries))
 
 #, Categories = categories, Categories_len = len(categories), Allergens = allergens, Allergens_len = len(allergens)
