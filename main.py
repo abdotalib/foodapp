@@ -17,9 +17,13 @@ def list_data(per1, per2):
 
 def fetch_data(data):
 	l=[]
-	for i in range(len(data)):
-		d = data['products'][i]
-		l.append(['image_front_small_url'])
+	df = pd.DataFrame(data)
+	for i in range(0, len(df)):
+		prod = df['products'][i]
+		if 'image_front_url' in prod.keys():
+			l.append(str(prod['image_front_small_url']))
+		else:
+			l.append("C:/Users/hp/Desktop/tti/foodapp/img.png")
 	return l
 
 
@@ -39,16 +43,21 @@ app = Flask(__name__)
 @app.route('/index', methods = ['POST', 'GET'])
 def index():
     if request.method == 'POST':
+    	conn = http.client.HTTPSConnection("us.openfoodfacts.org")
     	countrie = 'en:'+request.form['Countries']
     	key_world = request.form['search']
     	pay = countries_data[str(countrie)]['country_code_3']
-    	url = "https://world.openfoodfacts.org/cgi/search.pl?search_terms={}&search_simple=1&action=process&json=1".format(key_world)#str(pay['en']),
-
-    	#url = "https://{}.openfoodfacts.org/cgi/search.pl?search_terms={}&user_id=abdotalib&password=abd123do&search_simple=1&jqm=1"
+    	con = http.client.HTTPSConnection("{}.openfoodfacts.org".format(pay['en']))
+    	url = "/cgi/search.pl?search_terms={}&search_simple=1&action=process&json=true".format(key_world)#str(pay['en']),
+    	#url = "https://{}-fr.openfoodfacts.org/cgi/search.pl?search_terms={}&search_simple=1&action=process".format(pay['en'] ,key_world)
     	payload = {}
     	headers= {}
-    	response = requests.request("GET", url, headers=headers, data = payload, verify=False)
-    	data = json.loads(response.text) #text.encode('utf8')#pd.read_json()
+    	con.request("GET", url, headers, payload)
+    	res = con.getresponse()
+    	data = res.read()
+    	data = data.decode("utf-8")
+    	jsonfiles = json.loads(data)
+    	#data = json.loads(response.text) #text.encode('utf8')#pd.read_json()
     	#data = json.load(urllib.request.urlopen(url))
 
     	'''
@@ -61,8 +70,9 @@ def index():
     	#print(data.decode("utf-8"))
     	jsonfiles = json.loads(data.to_json(orient='records'))
     	'''
-    	#d = fetch_data(data)
-    	return  render_template("all_info.html", data = data)
+    	f_d = fetch_data(jsonfiles)
+
+    	return  render_template("all_info.html", data = f_d)
     return render_template("index.html", Countries = countries, Countries_len = len(countries))
 
 #, Categories = categories, Categories_len = len(categories), Allergens = allergens, Allergens_len = len(allergens)

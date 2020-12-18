@@ -5,6 +5,9 @@
 	<title></title>
 </head>
 <body>
-	<p>{{data}}</p>
+	{%for i in range(0, data|length)%}
+		<p><img src={{data[i]}} width="100" height="100"></p> 
+	{%endfor%} 
+	
 </body>
 </html>
