@@ -2,12 +2,44 @@
 <html>
 <head>
 	<meta charset="utf8">
+	<link rel="stylesheet" type= "text/css" href="/static/css/main.css" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	<title></title>
+
 </head>
 <body>
-	{%for i in range(0, data|length)%}
-		<p><img src={{data[i]}} width="100" height="100"></p> 
-	{%endfor%} 
-	
+
+<div class="container">
+  <h2>Condensed Table</h2>            
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>photo</th>
+        <th>name</th>
+        <th>nutrient levels</th>
+        <th>ingredients text </th>
+        <th>ingredients text with allergens</th>
+
+      </tr>
+    </thead>
+    <tbody>
+    	{%for i in range(0, imgs|length)%}
+	    <tr>
+	        <td><img src={{imgs[i]}} width="100" height="100"></td>
+	        <td>Doe</td>
+	        <td>{{nutrient_levels[i]}}</td>
+	        <td>{{ingredients_text[i]}}</td>
+	        <td>{{ingredients_allergens[i]}}</td>
+	    </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
+
+
 </body>
 </html>

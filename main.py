@@ -15,15 +15,14 @@ def list_data(per1, per2):
 		temp.append(d[3:])
 	return temp
 
-def fetch_data(data):
-	l=[]
+def fetch_data(data, key):
+	img = str("/static/err.png")
 	df = pd.DataFrame(data)
-	for i in range(0, len(df)):
-		prod = df['products'][i]
-		if 'image_front_url' in prod.keys():
-			l.append(str(prod['image_front_small_url']))
-		else:
-			l.append("C:/Users/hp/Desktop/tti/foodapp/img.png")
+	l = []
+	if key == 'image_front_url':
+		l = [i[key]  if key in i.keys() else img for i in df['products']]
+	else :
+		l = [i[key]  if key in i.keys() else 'Null' for i in df['products']]
 	return l
 
 
@@ -43,7 +42,6 @@ app = Flask(__name__)
 @app.route('/index', methods = ['POST', 'GET'])
 def index():
     if request.method == 'POST':
-    	conn = http.client.HTTPSConnection("us.openfoodfacts.org")
     	countrie = 'en:'+request.form['Countries']
     	key_world = request.form['search']
     	pay = countries_data[str(countrie)]['country_code_3']
@@ -70,9 +68,12 @@ def index():
     	#print(data.decode("utf-8"))
     	jsonfiles = json.loads(data.to_json(orient='records'))
     	'''
-    	f_d = fetch_data(jsonfiles)
-
-    	return  render_template("all_info.html", data = f_d)
+    	#(nutrient_levels)(ingredients_text_with_allergens)(ingredients_text)(image_front_small_url)
+    	
+    	return  render_template("all_info.html", imgs = fetch_data(jsonfiles, 'image_front_url'),
+    											ingredients_allergens = fetch_data(jsonfiles, 'ingredients_text_with_allergens'),
+    											ingredients_text = fetch_data(jsonfiles, 'ingredients_text'),
+    											nutrient_levels = fetch_data(jsonfiles, 'nutrient_levels'))
     return render_template("index.html", Countries = countries, Countries_len = len(countries))
 
 #, Categories = categories, Categories_len = len(categories), Allergens = allergens, Allergens_len = len(allergens)
