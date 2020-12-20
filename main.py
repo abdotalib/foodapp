@@ -73,7 +73,8 @@ def index():
     	return  render_template("all_info.html", imgs = fetch_data(jsonfiles, 'image_front_url'),
     											ingredients_allergens = fetch_data(jsonfiles, 'ingredients_text_with_allergens'),
     											ingredients_text = fetch_data(jsonfiles, 'ingredients_text'),
-    											nutrient_levels = fetch_data(jsonfiles, 'nutrient_levels'))
+    											nutrient_levels = fetch_data(jsonfiles, 'nutrient_levels'),
+    											product_name = fetch_data(jsonfiles, 'product_name'))
     return render_template("index.html", Countries = countries, Countries_len = len(countries))
 
 #, Categories = categories, Categories_len = len(categories), Allergens = allergens, Allergens_len = len(allergens)
